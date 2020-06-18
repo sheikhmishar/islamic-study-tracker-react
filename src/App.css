@@ -1,0 +1,17 @@
+/* Stretch middle div to push footer at the end */
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.componentsContainer {
+  flex-grow: 1;
+}
+
+/* Animated Navbar */
+.navbar.scrolling-navbar {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    transition: background .5s ease-in-out,padding .5s ease-in-out;
+}
