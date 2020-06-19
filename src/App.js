@@ -15,7 +15,7 @@ const App = () => {
     <>
       <Navbar />
       <StudentDataProvider>
-        <div className='componentsContainer'>
+        <div className='componentsContainer mt-5 pt-5'>
           <Switch>
             <Route exact path='/' component={Login} />
             <Route exact path='/login' component={Login} />

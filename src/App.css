@@ -11,7 +11,35 @@
 
 /* Animated Navbar */
 .navbar.scrolling-navbar {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    transition: background .5s ease-in-out,padding .5s ease-in-out;
+  padding-top: 12px;
+  padding-bottom: 12px;
+  transition: background 0.5s ease-in-out, padding 0.5s ease-in-out;
+}
+
+/* Custom styles */
+
+#root{
+  background-color: #fcfcfc;
+}
+
+.navbar {
+  box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.1);
+}
+
+.navbar .breadcrumb .nav-item > .nav-link,
+.navbar .navbar-nav .nav-item > .nav-link {
+  border-bottom: 2px solid white;
+}
+
+.navbar .breadcrumb .nav-item.active > .nav-link,
+.navbar .navbar-nav .nav-item.active > .nav-link {
+  border-bottom: 2px solid rgba(0, 0, 0, 0.9);
+}
+
+.Ripple {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.md-form .validate {
+  margin-bottom: 0;
 }
