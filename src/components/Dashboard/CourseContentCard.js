@@ -1,15 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react'
 import YoutubeVideo from './YoutubeVideo'
 import request from 'axios'
-import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBCard,
-  MDBInput,
-  MDBBtn,
-  MDBCollapse
-} from 'mdbreact'
+import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCollapse } from 'mdbreact'
 
 import { StudentDataContext } from '../Student/StudentDataProvider'
 import { API_DATA } from '../../config'
@@ -17,7 +9,7 @@ import { API_DATA } from '../../config'
 const CourseContentCard = props => {
   const { studentId } = useContext(StudentDataContext)
   const { title, data } = props
-  const { _id, contentId, videoEndPosition, finished, startedAt } = data
+  const { _id, contentId, videoEndPosition, /* finished,*/ startedAt } = data
 
   const [collapseId, setCollapseId] = useState('')
   const [shouldOpenYoutube, setShouldopenYoutube] = useState(false)
@@ -44,7 +36,7 @@ const CourseContentCard = props => {
       })
       .then(res => res.data)
       .then(res => {})
-  }, [elapsedTime])
+  }, [elapsedTime, studentId, _id, contentId, startedAt])
 
   const toggleCollapse = newCollapseId =>
     setCollapseId(collapseId !== newCollapseId ? newCollapseId : '')

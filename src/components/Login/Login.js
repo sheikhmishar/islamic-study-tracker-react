@@ -24,6 +24,7 @@ const Login = () => {
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [status, setStatus] = useState(null)
 
   // event.target.reportValidity()
   const onSubmit = event => {
@@ -32,6 +33,7 @@ const Login = () => {
       event.target.className += ' was-validated'
     const isValidForm = event.target.checkValidity()
     if (isValidForm) {
+      setStatus({ status: 'loading', message: 'loading' })
       request
         .post(`${API_AUTH}/login`, { username, password })
         .then(res => res.data)
@@ -45,6 +47,7 @@ const Login = () => {
             setIsLoggedIn(true)
           }
         })
+      setStatus({ status: 'failed', message: 'failed' })
     }
   }
 
@@ -64,6 +67,7 @@ const Login = () => {
             <MDBContainer>
               <MDBRow>
                 <MDBCol className='mt-5 mx-5'>
+                  {status ? status.message : ''}
                   <form
                     noValidate
                     onSubmit={onSubmit}

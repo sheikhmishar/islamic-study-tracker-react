@@ -18,11 +18,11 @@ const Logout = () => {
       if (isLoggedIn) {
         setStudentId('')
         setStudentName('')
-        setStudentData('')
+        setStudentData([])
         setIsLoggedIn(false)
       }
     }
-  }, [])
+  }, [isLoggedIn, setIsLoggedIn, setStudentId, setStudentName, setStudentData])
 
   return <Redirect to='/login' />
 }

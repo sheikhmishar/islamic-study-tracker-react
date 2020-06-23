@@ -1,14 +1,7 @@
 import React, { lazy, useContext, useEffect } from 'react'
 import { Redirect } from 'react-router-dom'
 import request from 'axios'
-import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBCard,
-  MDBInput,
-  MDBBtn
-} from 'mdbreact'
+import { MDBContainer, MDBRow, MDBCol } from 'mdbreact'
 
 import { lazyLoad } from '../Loader/Loader'
 import { StudentDataContext } from '../Student/StudentDataProvider'
@@ -49,7 +42,14 @@ const Dashboard = () => {
             }
           }
         })
-  }, [])
+  }, [
+    isLoggedIn,
+    studentId,
+    setIsLoggedIn,
+    setStudentData,
+    setStudentId,
+    setStudentName
+  ])
 
   if (isLoggedIn)
     return (
