@@ -18,7 +18,7 @@
 
 /* Custom styles */
 
-#root{
+#root {
   background-color: #fcfcfc;
 }
 
@@ -37,9 +37,15 @@
 }
 
 .Ripple {
-  background: rgba(0, 0, 0, 0.3);
+  background: rgba(0, 0, 0, 0.3) !important;
 }
 
 .md-form .validate {
   margin-bottom: 0;
+}
+
+@media (min-width: 768px) {
+  .course-status {
+    text-align: center;
+  }
 }

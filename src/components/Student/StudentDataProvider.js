@@ -7,7 +7,7 @@ const DEFAULT = {
   setStudentId: studentId => {},
   isLoggedIn: false,
   setIsLoggedIn: isLoggedIn => {},
-  studentData: {},
+  studentData: [],
   setStudentData: studentData => {}
 }
 
@@ -17,7 +17,7 @@ export const StudentDataProvider = props => {
   const [studentId, setStudentId] = useState(DEFAULT.studentId)
   const [studentName, setStudentName] = useState(DEFAULT.studentName)
   const [isLoggedIn, setIsLoggedIn] = useState(DEFAULT.isLoggedIn)
-  const [studentData, setStudentData] = useState(DEFAULT.studentName)
+  const [studentData, setStudentData] = useState(DEFAULT.studentData)
 
   useEffect(() => {
     const alreadyLoggedIn = localStorage.getItem('studentLoggedIn') === 'true'

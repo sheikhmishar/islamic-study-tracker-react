@@ -1,30 +1,45 @@
-import React from 'react'
-import { Switch, Route, useLocation } from 'react-router-dom'
+import React, { lazy } from 'react'
+import { Switch, Route } from 'react-router-dom'
 
 import { StudentDataProvider } from './components/Student/StudentDataProvider'
-import Navbar from './components/Navbar/Navbar'
-import Footer from './components/Footer/Footer'
-import Login from './components/Login/Login'
-import Register from './components/Register/Register'
-import Dashboard from './components/Dashboard/Dashboard'
-
+import { lazyLoad } from './components/Loader/Loader'
 import './App.css'
+
+const Navbar = lazy(() => import('./components/Navbar/Navbar'))
+const Footer = lazy(() => import('./components/Footer/Footer'))
+const Login = lazy(() => import('./components/Login/Login'))
+const Logout = lazy(() => import('./components/Logout'))
+const Register = lazy(() => import('./components/Register/Register'))
+const Dashboard = lazy(() => import('./components/Dashboard/Dashboard'))
 
 const App = () => {
   return (
     <>
-      <Navbar />
       <StudentDataProvider>
+        {lazyLoad(<Navbar />)}
         <div className='componentsContainer mt-5 pt-5'>
           <Switch>
-            <Route exact path='/' component={Login} />
-            <Route exact path='/login' component={Login} />
-            <Route exact path='/register' component={Register} />
-            <Route exact path='/dashboard' component={Dashboard} />
+            <Route exact path='/' render={props => lazyLoad(<Login />)} />
+            <Route exact path='/login' render={props => lazyLoad(<Login />)} />
+            <Route
+              exact
+              path='/logout'
+              render={props => lazyLoad(<Logout />)}
+            />
+            <Route
+              exact
+              path='/register'
+              render={props => lazyLoad(<Register />)}
+            />
+            <Route
+              exact
+              path='/dashboard'
+              render={props => lazyLoad(<Dashboard />)}
+            />
           </Switch>
         </div>
       </StudentDataProvider>
-      <Footer />
+      {lazyLoad(<Footer />)}
     </>
   )
 }

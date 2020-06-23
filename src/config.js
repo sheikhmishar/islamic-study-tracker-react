@@ -1,2 +1,2 @@
-export const API_AUTH = 'http://localhost:5000/api/auth',
-  API_DATA = 'http://localhost:5000/api/students' // TODO: dotenv
+export const API_AUTH = process.env.REACT_APP_API_AUTH_URL,
+  API_DATA = process.env.REACT_APP_API_DATA_URL

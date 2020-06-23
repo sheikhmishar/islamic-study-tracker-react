@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link, Redirect } from 'react-router-dom'
 import request from 'axios'
 import {
   MDBRow,
@@ -10,11 +10,17 @@ import {
   MDBBtn
 } from 'mdbreact'
 
-import { API_AUTH, API_DATA } from '../../config'
+import { API_AUTH } from '../../config'
 import { StudentDataContext } from '../Student/StudentDataProvider'
 
 const Login = () => {
-  const { isLoggedIn } = useContext(StudentDataContext)
+  const {
+    isLoggedIn,
+    setIsLoggedIn,
+    setStudentData,
+    setStudentId,
+    setStudentName
+  } = useContext(StudentDataContext)
 
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -29,7 +35,16 @@ const Login = () => {
       request
         .post(`${API_AUTH}/login`, { username, password })
         .then(res => res.data)
-        .then(res => console.log(res))
+        .then(res => {
+          if (res.length > 0) {
+            localStorage.setItem('studentLoggedIn', 'true')
+            localStorage.setItem('loggedInStudentId', res[0]._id)
+            setStudentId(res[0]._id)
+            setStudentName(res[0].username)
+            setStudentData(res[0].data)
+            setIsLoggedIn(true)
+          }
+        })
     }
   }
 
@@ -39,7 +54,8 @@ const Login = () => {
     else if (name === 'password') setPassword(value)
   }
 
-  // return <>Login {isLoggedIn && <>Already Logged In</>}</>
+  if (isLoggedIn) return <Redirect to='/dashboard' />
+
   return (
     <MDBContainer className='mt-3'>
       <MDBRow className='justify-content-center'>
