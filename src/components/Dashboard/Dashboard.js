@@ -27,19 +27,15 @@ const Dashboard = () => {
         .get(`${API_DATA}/${studentId}`)
         .then(res => res.data)
         .then(res => {
-          if (res) {
-            if (
-              typeof res.message != 'undefined' &&
-              res.message.includes('Error')
-            ) {
-              localStorage.clear()
-              setIsLoggedIn(false)
-            } else {
-              setStudentData(res.data)
-              setStudentId(res._id)
-              setStudentName(res.username)
-              setIsLoggedIn(true)
-            }
+          setStudentData(res.data)
+          setStudentId(res._id)
+          setStudentName(res.username)
+          setIsLoggedIn(true)
+        })
+        .catch(err => {
+          if (err.response) {
+            localStorage.clear()
+            setIsLoggedIn(false)
           }
         })
   }, [
@@ -51,13 +47,20 @@ const Dashboard = () => {
     setStudentName
   ])
 
+  const onCardContentChange = (_id, newStudentData) =>
+    setStudentData(
+      studentData.map(data => (data._id === _id ? newStudentData : data))
+    )
+
   if (isLoggedIn)
     return (
       <MDBContainer>
         <MDBRow className='justify-content-center'>
-          <p className='h5 text-center mb-4'>
-            Assalaamu'alaikum, {studentName}
-          </p>
+          {studentName && (
+            <p className='h5 text-center mb-4'>
+              Assalaamu'alaikum, {studentName}
+            </p>
+          )}
         </MDBRow>
         <MDBRow className='justify-content-center'>
           <MDBCol>
@@ -66,11 +69,9 @@ const Dashboard = () => {
                 studentData.map((data, i) => (
                   <CourseContentCard
                     key={i}
-                    id={data._id}
                     title={`Lecture ${i + 1}`}
-                    contentId={data.contentId}
-                    lastPosition={data.videoEndPosition}
                     data={data}
+                    onChange={onCardContentChange}
                   />
                 ))
               )}

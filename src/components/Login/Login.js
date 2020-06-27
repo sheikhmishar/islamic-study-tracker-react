@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import request from 'axios'
 import {
@@ -14,14 +14,6 @@ import {
 import { API_AUTH } from '../../config'
 import { StudentDataContext } from '../Student/StudentDataProvider'
 
-const DEFAULT = {
-  username: '',
-  setUsername: username => {},
-  password: '',
-  setPassword: password => {},
-  status: { type: 'primary', message: '' }
-}
-
 const Login = () => {
   const {
     isLoggedIn,
@@ -31,11 +23,9 @@ const Login = () => {
     setStudentName
   } = useContext(StudentDataContext)
 
-  const [username, setUsername] = useState(DEFAULT.username)
-  const [password, setPassword] = useState(DEFAULT.password)
-  const [status, setStatus] = useState(DEFAULT.status)
-
-  useEffect(() => setStatus(null), [])
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [status, setStatus] = useState({ type: '', message: '' })
 
   const login = () => {
     setStatus({ type: 'primary', message: 'Please wait' })
@@ -83,10 +73,8 @@ const Login = () => {
             <MDBContainer>
               <MDBRow>
                 <MDBCol className='mt-5 mx-5'>
-                  {status ? (
-                    <MDBContainer>
-                      <MDBAlert color={status.type}>{status.message}</MDBAlert>
-                    </MDBContainer>
+                  {status.type !== '' ? (
+                    <MDBAlert color={status.type}>{status.message}</MDBAlert>
                   ) : (
                     <></>
                   )}
@@ -106,10 +94,10 @@ const Login = () => {
                         group
                         required
                         validate>
-                        <div className='invalid-feedback ml-4'>
+                        <div className='invalid-feedback ml-5'>
                           Please provide a valid username
                         </div>
-                        <div className='valid-feedback ml-4'>Looks good!</div>
+                        <div className='valid-feedback ml-5'>Looks good!</div>
                       </MDBInput>
 
                       <MDBInput
@@ -122,10 +110,10 @@ const Login = () => {
                         group
                         required
                         validate>
-                        <div className='invalid-feedback ml-4'>
+                        <div className='invalid-feedback ml-5'>
                           Please provide a valid password
                         </div>
-                        <div className='valid-feedback ml-4'>Looks good!</div>
+                        <div className='valid-feedback ml-5'>Looks good!</div>
                       </MDBInput>
                     </div>
                     <div className='text-center'>

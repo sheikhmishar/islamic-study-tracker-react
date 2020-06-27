@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import request from 'axios'
 import {
@@ -15,11 +15,7 @@ import { StudentDataContext } from '../Student/StudentDataProvider'
 import { API_AUTH } from '../../config'
 
 const DEFAULT = {
-  username: '',
-  setUsername: username => {},
-  password: '',
-  setPassword: password => {},
-  status: { type: 'primary', message: '' },
+  status: { type: '', message: '' },
   usernameErrorMessage: 'Please provide a valid username',
   passwordErrorMessage: 'Please provide a valid password',
   successMessage: 'Looks good!'
@@ -30,14 +26,12 @@ const Register = () => {
 
   const [status, setStatus] = useState(DEFAULT.status)
   const [shouldRedirectToLogin, setRedirectToLogin] = useState(false)
-  const [username, setUsername] = useState(DEFAULT.username)
-  const [password, setPassword] = useState(DEFAULT.password)
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState(DEFAULT.password)
   const [confirmPasswordError, setConfirmPasswordError] = useState(
     DEFAULT.passwordErrorMessage
   )
-
-  useEffect(() => setStatus(null), [])
 
   const register = () => {
     setStatus({ type: 'primary', message: 'Please wait' })
@@ -94,10 +88,8 @@ const Register = () => {
             <MDBContainer>
               <MDBRow>
                 <MDBCol className='mt-5 mx-5'>
-                  {status ? (
-                    <MDBContainer>
-                      <MDBAlert color={status.type}>{status.message}</MDBAlert>
-                    </MDBContainer>
+                  {status.type !== '' ? (
+                    <MDBAlert color={status.type}>{status.message}</MDBAlert>
                   ) : (
                     <></>
                   )}
@@ -117,10 +109,10 @@ const Register = () => {
                         group
                         required
                         validate>
-                        <div className='invalid-feedback ml-4'>
+                        <div className='invalid-feedback ml-5'>
                           {DEFAULT.usernameErrorMessage}
                         </div>
-                        <div className='valid-feedback ml-4'>
+                        <div className='valid-feedback ml-5'>
                           {DEFAULT.successMessage}
                         </div>
                       </MDBInput>
@@ -134,10 +126,10 @@ const Register = () => {
                         group
                         required
                         validate>
-                        <div className='invalid-feedback ml-4'>
+                        <div className='invalid-feedback ml-5'>
                           {DEFAULT.passwordErrorMessage}
                         </div>
-                        <div className='valid-feedback ml-4'>
+                        <div className='valid-feedback ml-5'>
                           {DEFAULT.successMessage}
                         </div>
                       </MDBInput>
@@ -151,10 +143,10 @@ const Register = () => {
                         onChange={onInputChange}
                         validate
                         required>
-                        <div className='invalid-feedback ml-4'>
+                        <div className='invalid-feedback ml-5'>
                           {confirmPasswordError}
                         </div>
-                        <div className='valid-feedback ml-4'>
+                        <div className='valid-feedback ml-5'>
                           {DEFAULT.successMessage}
                         </div>
                       </MDBInput>
