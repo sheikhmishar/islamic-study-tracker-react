@@ -2,7 +2,13 @@
 .env
 
 # dependencies
-/node_modules
+/node_modules/*
+!/node_modules/react-scripts
+/node_modules/react-scripts/*
+!/node_modules/react-scripts/config
+/node_modules/react-scripts/config/*
+!/node_modules/react-scripts/config/webpack*.js
+
 /.pnp
 .pnp.js
 
