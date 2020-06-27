@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import { Link, Redirect } from 'react-router-dom'
 import request from 'axios'
 import {
@@ -7,11 +7,20 @@ import {
   MDBCard,
   MDBContainer,
   MDBInput,
-  MDBBtn
+  MDBBtn,
+  MDBAlert
 } from 'mdbreact'
 
 import { API_AUTH } from '../../config'
 import { StudentDataContext } from '../Student/StudentDataProvider'
+
+const DEFAULT = {
+  username: '',
+  setUsername: username => {},
+  password: '',
+  setPassword: password => {},
+  status: { type: 'primary', message: '' }
+}
 
 const Login = () => {
   const {
@@ -22,9 +31,32 @@ const Login = () => {
     setStudentName
   } = useContext(StudentDataContext)
 
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-  const [status, setStatus] = useState(null)
+  const [username, setUsername] = useState(DEFAULT.username)
+  const [password, setPassword] = useState(DEFAULT.password)
+  const [status, setStatus] = useState(DEFAULT.status)
+
+  useEffect(() => setStatus(null), [])
+
+  const login = () => {
+    setStatus({ type: 'primary', message: 'Please wait' })
+    request
+      .post(`${API_AUTH}/login`, { username, password })
+      .then(res => res.data[0])
+      .then(res => {
+        setStatus({ type: 'success', message: 'Login Successful' })
+        localStorage.setItem('studentLoggedIn', 'true')
+        localStorage.setItem('loggedInStudentId', res._id)
+        setStudentId(res._id)
+        setStudentName(res.username)
+        setStudentData(res.data)
+        setTimeout(() => setIsLoggedIn(true), 1000)
+      })
+      .catch(err => {
+        if (err.response)
+          setStatus({ type: 'danger', message: err.response.data.message })
+        else setStatus({ type: 'danger', message: 'Connection problem' })
+      })
+  }
 
   // event.target.reportValidity()
   const onSubmit = event => {
@@ -32,23 +64,7 @@ const Login = () => {
     if (!event.target.className.includes('was-validated'))
       event.target.className += ' was-validated'
     const isValidForm = event.target.checkValidity()
-    if (isValidForm) {
-      setStatus({ status: 'loading', message: 'loading' })
-      request
-        .post(`${API_AUTH}/login`, { username, password })
-        .then(res => res.data)
-        .then(res => {
-          if (res.length > 0) {
-            localStorage.setItem('studentLoggedIn', 'true')
-            localStorage.setItem('loggedInStudentId', res[0]._id)
-            setStudentId(res[0]._id)
-            setStudentName(res[0].username)
-            setStudentData(res[0].data)
-            setIsLoggedIn(true)
-          }
-        })
-      setStatus({ status: 'failed', message: 'failed' })
-    }
+    if (isValidForm) login()
   }
 
   const onInputChange = event => {
@@ -57,7 +73,7 @@ const Login = () => {
     else if (name === 'password') setPassword(value)
   }
 
-  if (isLoggedIn) return <Redirect to='/dashboard' />
+  if (isLoggedIn) return <Redirect to='/dashboard' /> // TODO: redirect reason
 
   return (
     <MDBContainer className='mt-3'>
@@ -67,12 +83,18 @@ const Login = () => {
             <MDBContainer>
               <MDBRow>
                 <MDBCol className='mt-5 mx-5'>
-                  {status ? status.message : ''}
+                  {status ? (
+                    <MDBContainer>
+                      <MDBAlert color={status.type}>{status.message}</MDBAlert>
+                    </MDBContainer>
+                  ) : (
+                    <></>
+                  )}
                   <form
                     noValidate
                     onSubmit={onSubmit}
                     className='needs-validation'>
-                    <p className='h5 text-center mb-4 text-muted'>Sign in</p>
+                    <p className='h5 text-center mb-4 text-dark'>Sign in</p>
                     <div className='grey-text'>
                       <MDBInput
                         icon='user'
