@@ -1,34 +1,38 @@
 import React, { useState, useEffect, useContext } from 'react'
+import { MDBContainer, MDBRow, MDBCol, MDBCard, MDBCollapse } from 'mdbreact'
 import request from 'axios'
-import {
-  MDBContainer,
-  MDBRow,
-  MDBCol,
-  MDBCard,
-  MDBCollapse
-} from 'mdbreact'
 
 import { StudentDataContext } from '../Student/StudentDataProvider'
 import { API_DATA } from '../../config'
 import YoutubeVideo from './YoutubeVideo'
+
+const timeStringFromSeconds = seconds => {
+  if (seconds === 0) return '0s'
+
+  const hours = parseInt(seconds / 3600)
+  seconds %= 3600
+  const minutes = parseInt(seconds / 60)
+  seconds %= 60
+
+  return (
+    `${hours !== 0 ? `${hours}h ` : ''}` +
+    `${minutes !== 0 ? `${minutes}m ` : ''}` +
+    `${seconds !== 0 ? `${seconds}s` : ''}`
+  )
+}
 
 const CourseContentCard = ({ title, data, onChange }) => {
   const { studentId } = useContext(StudentDataContext)
   const { _id, contentId, videoEndPosition, finished, startedAt } = data
 
   const [collapseId, setCollapseId] = useState('')
-  const [shouldOpenYoutube, setShouldopenYoutube] = useState(false)
+  const [shouldOpenYoutube, setShouldOpenYoutube] = useState(false)
   const [elapsedTime, setElapsedTime] = useState(videoEndPosition)
 
   useEffect(() => {
-    if (!collapseId)
-      setTimeout(() => {
-        setShouldopenYoutube(false)
-      }, 1000)
-    else
-      setTimeout(() => {
-        setShouldopenYoutube(true)
-      }, 500)
+    !collapseId
+      ? setTimeout(() => setShouldOpenYoutube(false), 1000)
+      : setTimeout(() => setShouldOpenYoutube(true), 500)
   }, [collapseId])
 
   useEffect(() => {
@@ -51,10 +55,8 @@ const CourseContentCard = ({ title, data, onChange }) => {
     onChange
   ])
 
-  const toggleCollapse = newCollapseId =>
-    setCollapseId(collapseId !== newCollapseId ? newCollapseId : '')
-
-  const onPlayButtonClicked = () => toggleCollapse('youtube-video')
+  const onPlayButtonClicked = () =>
+    setCollapseId(collapseId !== 'youtube-video' ? 'youtube-video' : '')
 
   return (
     <MDBCard wide className='my-3 py-3'>
@@ -63,11 +65,12 @@ const CourseContentCard = ({ title, data, onChange }) => {
           <MDBCol md='4'>
             <i className='fa fa-chalkboard'></i> {title}
           </MDBCol>
-          <MDBCol sm='6' md='3' xl='2'>
-            <i className='fa fa-clock'></i> Duration: TBI s
-          </MDBCol>
-          <MDBCol sm='6' md='3' xl='2'>
-            <i className='far fa-clock'></i> Watched: {elapsedTime}s
+          {/* <MDBCol sm='6' md='3' xl='2'>
+            <i className='far fa-clock'></i> Duration: TBI s
+          </MDBCol> */}
+          <MDBCol sm='6' md='3' xl='3'>
+            <i className='fa fa-clock'></i> Watched:{' '}
+            {timeStringFromSeconds(elapsedTime)}
           </MDBCol>
           <MDBCol sm='6' md='2' xl='2'>
             <span onClick={onPlayButtonClicked}>
@@ -107,8 +110,8 @@ const CourseContentCard = ({ title, data, onChange }) => {
                     <YoutubeVideo
                       videoId={contentId}
                       shouldPause={!collapseId}
-                      startTime={elapsedTime}
-                      setStartTime={setElapsedTime}
+                      lastPosition={elapsedTime}
+                      setLastPosition={setElapsedTime}
                     />
                   </MDBCollapse>
                 </MDBCol>

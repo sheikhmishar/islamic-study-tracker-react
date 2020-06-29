@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react'
 import Youtube from 'react-youtube'
 
-const YoutubeVideo = ({ videoId, shouldPause, startTime, setStartTime }) => {
+const YoutubeVideo = ({
+  videoId,
+  shouldPause,
+  lastPosition,
+  setLastPosition
+}) => {
   const [player, setPlayer] = useState(null)
 
-  const opts = {
+  const options = {
     height: '400px',
     width: '100%',
     playerVars: {
@@ -14,39 +19,35 @@ const YoutubeVideo = ({ videoId, shouldPause, startTime, setStartTime }) => {
   }
 
   useEffect(() => {
-    if (player) player.pauseVideo()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [shouldPause])
+    if (player && shouldPause) player.pauseVideo()
+  }, [shouldPause, player])
 
-  // useEffect(() => {
-  //   console.log('mounting', player ? player.getCurrentTime() : '')
-  //   return () => {
-  //     console.log('unmounting', player ? player.getCurrentTime() : '')
-  //   }
-  // }, [])
+  const onPlayerReady = e => {
+    setPlayer(e.target)
+    e.target.seekTo(lastPosition)
+    e.target.seekTo(lastPosition)
+    e.target.pauseVideo()
+  }
+  const onPlayerPaused = e =>
+    setLastPosition(parseInt(e.target.getCurrentTime()))
+
+  const onPlayResume = e => {
+    // console.log('play')
+    if (shouldPause) e.target.pauseVideo()
+  }
+  const onPlayEnd = e => {
+    // console.log('end')
+  }
 
   return (
     <>
       <Youtube
-        onReady={e => {
-          setPlayer(e.target)
-          e.target.seekTo(startTime)
-          e.target.seekTo(startTime)
-          e.target.pauseVideo()
-        }}
-        onPause={e => {
-          // console.log('paused', e.target.getCurrentTime())
-          setStartTime(parseInt(e.target.getCurrentTime()))
-        }}
-        onPlay={e => {
-          // console.log('play')
-          if (shouldPause) e.target.pauseVideo()
-        }}
-        onEnd={e => {
-          // console.log('end')
-        }}
+        onReady={onPlayerReady}
+        onPause={onPlayerPaused}
+        onPlay={onPlayResume}
+        onEnd={onPlayEnd}
         videoId={videoId}
-        opts={opts}
+        opts={options}
       />
     </>
   )
