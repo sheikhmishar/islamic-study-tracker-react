@@ -92,31 +92,27 @@ const CourseContentCard = ({ title, data, onChange }) => {
           </MDBCol>
         </MDBRow>
         {shouldOpenYoutube && (
-          <MDBRow>
-            <MDBContainer className='mt-2'>
-              <MDBRow className='w-100 justify-content-center'>
-                <MDBCol md='8'>
-                  <MDBCollapse id='youtube-video' isOpen={collapseId}>
-                    <h6>
-                      If you encounter problems rendering video, follow{' '}
-                      <a
-                        href={`https://youtube.com/watch?v=${contentId}`}
-                        target='_blank'
-                        rel='noopener noreferrer'>
-                        this {''}
-                      </a>
-                      link
-                    </h6>
-                    <YoutubeVideo
-                      videoId={contentId}
-                      shouldPause={!collapseId}
-                      lastPosition={elapsedTime}
-                      setLastPosition={setElapsedTime}
-                    />
-                  </MDBCollapse>
-                </MDBCol>
-              </MDBRow>
-            </MDBContainer>
+          <MDBRow className='w-100 justify-content-center mx-0'>
+            <MDBCol lg='8'>
+              <MDBCollapse id='youtube-video' isOpen={collapseId}>
+                <h6 className='text-center'>
+                  If you encounter problems rendering video, follow{' '}
+                  <a
+                    href={`https://youtube.com/watch?v=${contentId}`}
+                    target='_blank'
+                    rel='noopener noreferrer'>
+                    this {''}
+                  </a>
+                  link
+                </h6>
+                <YoutubeVideo
+                  videoId={contentId}
+                  shouldPause={!collapseId}
+                  lastPosition={elapsedTime}
+                  setLastPosition={setElapsedTime}
+                />
+              </MDBCollapse>
+            </MDBCol>
           </MDBRow>
         )}
       </MDBContainer>
